@@ -52,8 +52,8 @@ namespace AzureApplicationDemo
 
             app.UseTwitterAuthentication(new TwitterAuthenticationOptions
             {
-                ConsumerKey = "XXXX",
-                ConsumerSecret = "XXXX",
+                ConsumerKey = twitterKey,
+                ConsumerSecret = twitterSecret,
                 BackchannelCertificateValidator =
                     new Microsoft.Owin.Security.CertificateSubjectKeyIdentifierValidator(new[]
                     {
