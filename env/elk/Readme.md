@@ -1,0 +1,1 @@
+This directory contains the Dockerfile to build a new logstash/elasticsearch/kibana image. The keys included in this directory are set up to allow for logstash-forwarder to connect to the elk server assuming it is called elk. If you don't have control over your own DNS servers then you can put an entry in your hosts file. 
