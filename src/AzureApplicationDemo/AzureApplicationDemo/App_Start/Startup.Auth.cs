@@ -50,6 +50,8 @@ namespace AzureApplicationDemo
             var twitterSecret = Environment.GetEnvironmentVariable("mva-twitter-secret");
             //app.UseTwitterAuthentication(twitterKey, twitterSecret);
 
+            if (String.IsNullOrEmpty(twitterKey) || string.IsNullOrEmpty(twitterSecret))
+                return;
             app.UseTwitterAuthentication(new TwitterAuthenticationOptions
             {
                 ConsumerKey = twitterKey,
