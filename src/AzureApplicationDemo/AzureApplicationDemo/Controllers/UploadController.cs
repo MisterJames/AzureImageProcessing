@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,6 +10,11 @@ namespace AzureApplicationDemo.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult Send(IEnumerable<HttpPostedFileBase> files)
+        {
+            return new EmptyResult();
         }
     }
 }
