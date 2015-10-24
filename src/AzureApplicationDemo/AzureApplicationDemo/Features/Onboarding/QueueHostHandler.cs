@@ -16,7 +16,8 @@ namespace AzureApplicationDemo.Features.Onboarding
 
         protected override void HandleCore(QueueHostCommand message)
         {
-            var storageAccount = CloudStorageAccount.Parse(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageConnectionString));
+            var connectionString = ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageConnectionString);
+            var storageAccount = CloudStorageAccount.Parse(connectionString);
             var client = storageAccount.CreateCloudQueueClient();
             var queue = client.GetQueueReference("creatednshost");
             queue.CreateIfNotExists();

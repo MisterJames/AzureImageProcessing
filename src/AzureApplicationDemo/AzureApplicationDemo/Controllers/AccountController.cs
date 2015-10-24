@@ -21,10 +21,6 @@ namespace AzureApplicationDemo.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public AccountController()
-        {
-        }
-
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMediator bus)
         {
             _bus = bus;
@@ -375,9 +371,10 @@ namespace AzureApplicationDemo.Controllers
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    var hostname = info.DefaultUserName;  // the signin name from Twitter
                     _bus.Send(new QueueHostCommand
                     {
-                        Host = new QueueHostViewModel {HostName = user.Id, UserId = user.Id}
+                        Host = new QueueHostViewModel {HostName = hostname, UserId = user.Id}
                     });
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
