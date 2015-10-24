@@ -74,3 +74,4 @@ var AzureApplicationDemo;
         })(Upload = Pages.Upload || (Pages.Upload = {}));
     })(Pages = AzureApplicationDemo.Pages || (AzureApplicationDemo.Pages = {}));
 })(AzureApplicationDemo || (AzureApplicationDemo = {}));
+//# sourceMappingURL=Upload.js.map

@@ -19,8 +19,7 @@ namespace AzureApplicationDemo
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            AutoFacConfig.RegisterServices();
+            ContainerConfig.RegisterServices();
 
         }
     }
