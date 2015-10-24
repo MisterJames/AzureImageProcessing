@@ -5,16 +5,19 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AzureApplicationDemo.Features.Onboarding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using AzureApplicationDemo.Models;
+using MediatR;
 
 namespace AzureApplicationDemo.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IMediator _bus;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -22,8 +25,9 @@ namespace AzureApplicationDemo.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMediator bus)
         {
+            _bus = bus;
             UserManager = userManager;
             SignInManager = signInManager;
         }
@@ -371,6 +375,10 @@ namespace AzureApplicationDemo.Controllers
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    _bus.Send(new QueueHostCommand
+                    {
+                        Host = new QueueHostViewModel {HostName = user.Id, UserId = user.Id}
+                    });
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
