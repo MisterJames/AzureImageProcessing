@@ -3,5 +3,26 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Engage uploads</h2>
+<h2>Drag and drop files to upload</h2>
+<div class="row">
+    <div id="zone">
+        <div id="zonetext"  data-out-text="Drag your files here" data-in-text="Good. Now drop them."></div>
+    </div>
+</div>
 
+    <div class="row">
+        <button class="btn btn-success upload-button" id="uploadButton">Upload</button>
+    </div>
+
+<div class="row">
+    <div id="uploaded">
+
+    </div>
+</div>
+
+<script src="~/Scripts/Pages/Upload/Upload.js"></script>
+<script>
+    var page = new AzureApplicationDemo.Pages.Upload.Index();
+    page.Init();
+
+</script>
