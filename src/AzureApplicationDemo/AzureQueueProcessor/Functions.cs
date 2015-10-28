@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure;
+using Microsoft.Azure.Management.Dns;
+using Microsoft.Azure.Management.Dns.Models;
 
 namespace AzureQueueProcessor
 {
@@ -14,6 +17,7 @@ namespace AzureQueueProcessor
         // on an Azure Queue called queue.
         public static void ProcessQueueMessage([QueueTrigger("creatednshost")] string message, TextWriter log)
         {
+            Console.WriteLine(message);
             log.WriteLine(message);
         }
     }
