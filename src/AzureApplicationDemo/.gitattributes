@@ -1,0 +1,4 @@
+*.cs text eol=crlf
+*.css text eol=crlf
+*.cshtml text eol=crlf
+*.ts text eol=crlf

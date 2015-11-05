@@ -18,6 +18,15 @@ namespace AzureApplicationDemo.Models
         }
     }
 
+    // crutch class used to get identity working with autofac
+    public class ApplicationUserStore : UserStore<ApplicationUser>
+    {
+        public ApplicationUserStore(ApplicationDbContext context)
+            : base(context)
+        {
+        }
+    }
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()

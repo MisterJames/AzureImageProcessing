@@ -8,6 +8,7 @@ namespace AzureApplicationDemo
     {
         public void Configuration(IAppBuilder app)
         {
+            ContainerConfig.RegisterServices(app);
             ConfigureAuth(app);
         }
     }

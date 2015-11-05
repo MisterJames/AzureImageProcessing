@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using AzureApplicationDemo.Models;
+using AzureApplicationDemo.Services;
 using Microsoft.Owin.Security.Twitter;
 
 namespace AzureApplicationDemo
@@ -46,10 +47,12 @@ namespace AzureApplicationDemo
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            var twitterKey =    Environment.GetEnvironmentVariable("mva-twitter-key");
-            var twitterSecret = Environment.GetEnvironmentVariable("mva-twitter-secret");
+            var twitterKey = ConfigurationService.ConfigurationValue(ConfigurationService.TwitterKey);
+            var twitterSecret = ConfigurationService.ConfigurationValue(ConfigurationService.TwitterSecret);
             //app.UseTwitterAuthentication(twitterKey, twitterSecret);
 
+            if (String.IsNullOrEmpty(twitterKey) || string.IsNullOrEmpty(twitterSecret))
+                return;
             app.UseTwitterAuthentication(new TwitterAuthenticationOptions
             {
                 ConsumerKey = twitterKey,
