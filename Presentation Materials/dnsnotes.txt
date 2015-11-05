@@ -1,0 +1,33 @@
+Notes on getting DNS running
+- Registered a domain
+- Create resource group in portal (optional)
+- create_azure_zone.ps1 (creating resource group through PS)
+    - steps in dns images folder, follow PS script
+- delegate domain to Azure DNS with registrar
+    ns1-08.azure-dns.com.
+    ns2-08.azure-dns.net.
+    ns3-08.azure-dns.org.
+    ns4-08.azure-dns.info.
+- create recordset
+ => https://azure.microsoft.com/en-us/documentation/articles/dns-operations-recordsets/
+
+
+
+------------------------------
+
+authenticating ARM requests
+  https://msdn.microsoft.com/en-ca/library/azure/dn790557.aspx
+  
+automating DNS  
+  https://azure.microsoft.com/en-gb/documentation/articles/dns-sdk/
+  
+https://azure.microsoft.com/en-us/documentation/articles/storage-dotnet-how-to-use-queues/#programmatically-access-queue-storage
+
+https://azure.microsoft.com/en-us/documentation/articles/dns-domain-delegation/
+
+https://azure.microsoft.com/en-us/documentation/articles/dns-operations-dnszones/#create-a-new-dns-zone
+
+
+https://azure.microsoft.com/en-us/documentation/articles/dns-getstarted-create-recordset/
+
+https://azure.microsoft.com/en-us/documentation/articles/storage-dotnet-how-to-use-queues/#programmatically-access-queue-storage
