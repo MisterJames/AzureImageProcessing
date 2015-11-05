@@ -20,7 +20,7 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             this.PartitionKey = batchId.ToString();
             this.RowKey = fileName;
         }
-        public BatchTableEntity(){ }
+        public BatchTableEntity() { }
     }
 
     public class BatchProcessorHandler : INotificationHandler<BatchUploadComplete>, INotificationHandler<FileUploaded>
@@ -48,20 +48,10 @@ namespace AzureApplicationDemo.Features.ImageProcessing
                 ConfigurationService.ConfigurationValue(ConfigurationService.BatchAccountKey));
             var client = BatchClient.Open(creds);
 
-            var poolId = "imageprocessing" + new Random().Next();
-            var pools = client.PoolOperations.ListPools();
-            if (pools.Any())
-                poolId = pools.First().Id;
-            else
-            {
-                var pool = client.PoolOperations.CreatePool(poolId, "4", "small", 3);
-                pool.Commit();
-            }
-            
 
             var job = client.JobOperations.CreateJob();
             job.Id = notification.BatchId.ToString();
-            job.PoolInformation = new PoolInformation { PoolId = poolId };
+            job.PoolInformation = new PoolInformation { PoolId = ConfigurationService.ConfigurationValue(ConfigurationService.BatchPoolId) };
             job.Commit();
 
             var submissionJob = client.JobOperations.GetJob(notification.BatchId.ToString());
@@ -83,6 +73,7 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             {
                 results += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardOutFileName).ReadAsString() + "\n\n";
             }
+            submissionJob.Terminate();
         }
         private IEnumerable<string> GetFilesInBatch(Guid batchId)
         {

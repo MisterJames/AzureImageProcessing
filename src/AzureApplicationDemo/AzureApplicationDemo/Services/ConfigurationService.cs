@@ -15,6 +15,8 @@ namespace AzureApplicationDemo.Services
         public const string BatchUrl = "mva-batch-url";
         public const string BatchAccountName = "mva-batch-account-name";
         public const string BatchAccountKey = "mva-batch-account-key";
+        public const string BatchPoolId = "mva-batch-pool-id";
+
 
 
         private static readonly Dictionary<string, string> ConfigurationValues = new Dictionary<string, string>();
@@ -27,7 +29,8 @@ namespace AzureApplicationDemo.Services
             TwitterSecret,
             BatchAccountKey,
             BatchAccountName, 
-            BatchUrl
+            BatchUrl,
+            BatchPoolId
         };
 
         static ConfigurationService()
