@@ -28,3 +28,13 @@ os family when creating pool https://azure.microsoft.com/en-us/documentation/art
 you can, and really should, specify "*" when 
 nodes can be interrupted during processing so tasks should be indempotent or at least side effect free until the end
 In general we want to use the latest OS version when we start and then update as we see fit
+
+Job preparation tasks run before any task. Runs on every single node. Equally the release task does the same thing. Examples of setup tasks might include uploading large data sets or installing specialized tools. The release tasks might clean up this data. 
+
+autoscale can be a formula so if your system makes use of a particular resource heavily you can monitor that and trigger scalling. For insance say your task are heavily IO based then you could check that
+
+failure recovery
+
+schedule batches so they run automatically every once in a while. You could put in a task to run every month
+
+cost only the cost of the resouces no additional costs
