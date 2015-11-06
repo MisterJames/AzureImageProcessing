@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using AzureApplicationDemo.Features.Upload;
@@ -21,11 +22,19 @@ namespace AzureApplicationDemo.Controllers
 
         public ActionResult Send(IEnumerable<HttpPostedFileBase> files)
         {
-            foreach(var file in files)
+            var batchId = Guid.NewGuid();
+            foreach (var file in files)
             {
-                var message = new UploadFileCommand { FileName = file.FileName, Stream = file.InputStream, ContentLength = file.ContentLength };
+                var message = new UploadFileCommand
+                {
+                    FileName = file.FileName,
+                    Stream = file.InputStream,
+                    ContentLength = file.ContentLength,
+                    BatchId = batchId
+                };
                 _mediator.Send(message);
             }
+            _mediator.Publish(new BatchUploadComplete { BatchId = batchId });
             return new EmptyResult();
         }
     }
