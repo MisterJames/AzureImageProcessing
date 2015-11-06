@@ -10,6 +10,16 @@ Notes on getting DNS running
     ns4-08.azure-dns.info.
 - create recordset
  => https://azure.microsoft.com/en-us/documentation/articles/dns-operations-recordsets/
+- add CNAME for verify
+- add A for root/naked
+- add CNAME for *
+- configure in Azure Web Sites
+
+New Hosts in Azure Web Sites
+ - get the tenant ID Get-AzureAccount
+ 
+ 
+ - create new recordset
 
 
 
