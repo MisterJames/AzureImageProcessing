@@ -6,6 +6,7 @@ using AzureApplicationDemo.Services;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Azure.Batch.Auth;
 using Microsoft.Azure.Batch;
+using System.Collections.Generic;
 
 namespace AzureApplicationDemo
 {
@@ -26,9 +27,11 @@ namespace AzureApplicationDemo
             var client = storageAccount.CreateCloudBlobClient();
             var container = client.GetContainerReference("batchcommand");
             container.CreateIfNotExists();
-            var fileName = "BatchTask.exe";
-            var blob = container.GetBlockBlobReference(fileName);
-            blob.UploadFromFile( Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/bin"), fileName), FileMode.Open);
+            foreach (var fileName in new List<string> { "BatchTask.exe", "Newtonsoft.Json.dll", "Microsoft.ProjectOxford.Vision.dll", "Microsoft.WindowsAzure.Storage.dll" })
+            {
+                var blob = container.GetBlockBlobReference(fileName);
+                blob.UploadFromFile(Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/bin"), fileName), FileMode.Open);
+            }
         }
       
         static void SetContainerPermission()
