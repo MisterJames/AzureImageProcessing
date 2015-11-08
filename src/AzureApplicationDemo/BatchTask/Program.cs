@@ -19,24 +19,29 @@ namespace BatchTask
             Console.WriteLine("starting up batch processing");
             var imageUrl = args[0];
             var visionKey = args[1];
+            var baseUrl = args[2];
+            var connectionString = args[3];
             var processor = new Processor();
             Console.WriteLine("Processing image " + imageUrl);
-            processor.Process(imageUrl, visionKey);
+            Console.WriteLine("Base URL " + baseUrl);
+            Console.WriteLine("connection string " + connectionString);
+            
+            processor.Process(imageUrl, visionKey, connectionString);
 
         }
     }
 
     class Processor
     {
-        public void Process(string imageUrl, string visionKey)
+        public void Process(string imageUrl, string visionKey, string connectionString)
         {
             //process with oxford
-            scanImage(imageUrl, visionKey);
+            scanImage(imageUrl, visionKey, connectionString);
             //process internally
             //report back
         }
 
-        private void scanImage(string imageUrl, string visionKey)
+        private void scanImage(string imageUrl, string visionKey, string connectionString)
         {
             var visionClient = new VisionServiceClient(visionKey);
 
@@ -50,11 +55,22 @@ namespace BatchTask
                     result = visionClient.AnalyzeImageAsync(stream).Result;
                     var jsonResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
                     File.WriteAllText("jsonresult.txt", jsonResult);
+                    UploadResult(jsonResult, connectionString, imageUrl);
                 }
             }
         }
 
-
+        private void UploadResult(string json, string connectionString, string imageUrl)
+        {
+            var storageAccount = CloudStorageAccount.Parse(connectionString);
+            var client = storageAccount.CreateCloudBlobClient();
+            var container = client.GetContainerReference("output");
+            container.CreateIfNotExists();
+            var blob = container.GetBlockBlobReference(imageUrl + ".json");
+            var bytes = Encoding.UTF8.GetBytes(json);
+            var stream = new MemoryStream(bytes);
+            blob.UploadFromStream(stream);
+        }
         private static void LogToTableStorage(string imageUrl, CloudTableClient tableClient)
         {
             var table = tableClient.GetTableReference("logs");

@@ -31,7 +31,8 @@ namespace AzureApplicationDemo.Services
             BatchAccountKey,
             BatchAccountName, 
             BatchUrl,
-            BatchPoolId
+            BatchPoolId,
+            VisionAPIKey
         };
 
         static ConfigurationService()

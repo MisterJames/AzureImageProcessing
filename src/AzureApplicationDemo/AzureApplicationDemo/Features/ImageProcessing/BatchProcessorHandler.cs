@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using AzureApplicationDemo.Features.Upload;
 using AzureApplicationDemo.Services;
@@ -57,11 +58,15 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             var submissionJob = client.JobOperations.GetJob(notification.BatchId.ToString());
             foreach (var file in GetFilesInBatch(notification.BatchId))
             {
-                var task = new CloudTask(file, string.Format("BatchTask.exe \"{0}\" \"{1}\"", file, ConfigurationService.ConfigurationValue(ConfigurationService.VisionAPIKey) ));
+                var task = new CloudTask(file, string.Format("BatchTask.exe \"{0}\" \"{1}\" \"{2}\" \"{3}\"", file, ConfigurationService.ConfigurationValue(ConfigurationService.VisionAPIKey), ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl), ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageConnectionString)));
                 var programFile = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/batchcommand/" + "BatchTask.exe", "BatchTask.exe");
+                var newtonsoft = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/batchcommand/" + "Newtonsoft.Json.dll", "Newtonsoft.Json.dll");
+                var vision = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/batchcommand/" + "Microsoft.ProjectOxford.Vision.dll", "Microsoft.ProjectOxford.Vision.dll");
+                var storageDll = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/batchcommand/" + "Microsoft.WindowsAzure.Storage.dll", "Microsoft.WindowsAzure.Storage.dll");
+
                 var dataFile = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/uploadedimages/" + file, file);
 
-                var taskFiles = new List<ResourceFile> { programFile, dataFile };
+                var taskFiles = new List<ResourceFile> { programFile, newtonsoft, vision, dataFile, storageDll };
                 task.ResourceFiles = taskFiles;
                 submissionJob.AddTask(task);
                 submissionJob.Commit();
@@ -69,10 +74,13 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             }
             client.Utilities.CreateTaskStateMonitor().WaitAll(submissionJob.ListTasks(), TaskState.Completed, new TimeSpan(0, 30, 0));
             var results = "";
+            var errors = "";
             foreach (CloudTask task in submissionJob.ListTasks())
             {
+                errors += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardErrorFileName).ReadAsString() + "\n\n";
                 results += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardOutFileName).ReadAsString() + "\n\n";
-                var json = task.GetNodeFile("jsonresult.txt");
+                
+                var json = GetJsonFromStorage(task.Id);
             }
             submissionJob.Terminate();
         }
@@ -83,6 +91,22 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             var table = tableClient.GetTableReference("batches");
             var query = new TableQuery<BatchTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, batchId.ToString()));
             return table.ExecuteQuery(query).Select(x => x.RowKey);
+        }
+
+        private string GetJsonFromStorage(string imageUrl)
+        {
+            var storageAccount = CloudStorageAccount.Parse(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageConnectionString));
+            var client = storageAccount.CreateCloudBlobClient();
+            var container = client.GetContainerReference("output");
+            container.CreateIfNotExists();
+            var blob = container.GetBlockBlobReference(imageUrl + ".json");
+
+            var stream = blob.OpenRead();
+            var bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, (int)stream.Length);
+            var json = new String(Encoding.UTF8.GetChars(bytes));
+            return json;
+            
         }
     }
 }
