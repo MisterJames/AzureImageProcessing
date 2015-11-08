@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Collections.Generic;
 
 namespace AzureApplicationDemo.Services
 {
@@ -16,6 +15,8 @@ namespace AzureApplicationDemo.Services
         public const string BatchAccountName = "mva-batch-account-name";
         public const string BatchAccountKey = "mva-batch-account-key";
         public const string BatchPoolId = "mva-batch-pool-id";
+
+        public const string VisionAPIKey = "mva-vision-api-key";
 
 
 

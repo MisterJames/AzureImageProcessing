@@ -4,8 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.ProjectOxford.Vision;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.ProjectOxford.Vision.Contract;
+using System.IO;
 
 namespace BatchTask
 {
@@ -15,36 +18,42 @@ namespace BatchTask
         {
             Console.WriteLine("starting up batch processing");
             var imageUrl = args[0];
+            var visionKey = args[1];
             var processor = new Processor();
             Console.WriteLine("Processing image " + imageUrl);
-            processor.Process(imageUrl);
+            processor.Process(imageUrl, visionKey);
 
         }
     }
 
     class Processor
     {
-        public void Process(string imageUrl)
+        public void Process(string imageUrl, string visionKey)
         {
-            var data = RetrieveImageFromUrl(imageUrl);
             //process with oxford
+            scanImage(imageUrl, visionKey);
             //process internally
             //report back
         }
 
-        private Bitmap RetrieveImageFromUrl(string imageUrl)
+        private void scanImage(string imageUrl, string visionKey)
         {
-            var storageAccount = CloudStorageAccount.Parse(System.Configuration.ConfigurationManager.AppSettings["StorageConnectionString"]);
-            var client = storageAccount.CreateCloudBlobClient();
-            var tableClient = storageAccount.CreateCloudTableClient();
-            LogToTableStorage(imageUrl, tableClient);
+            var visionClient = new VisionServiceClient(visionKey);
 
-            var container = client.GetContainerReference("uploadedimages");
-            container.CreateIfNotExists();
-            var blob = container.GetBlockBlobReference(Guid.NewGuid().ToString());
-            return new Bitmap(Image.FromStream(blob.OpenRead()));
-
+            AnalysisResult result;
+            if (imageUrl.StartsWith("http"))
+                result = visionClient.AnalyzeImageAsync(imageUrl).Result;
+            else
+            {
+                using (FileStream stream = File.Open(imageUrl, FileMode.Open))
+                {
+                    result = visionClient.AnalyzeImageAsync(stream).Result;
+                    var jsonResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                    File.WriteAllText("jsonresult.txt", jsonResult);
+                }
+            }
         }
+
 
         private static void LogToTableStorage(string imageUrl, CloudTableClient tableClient)
         {

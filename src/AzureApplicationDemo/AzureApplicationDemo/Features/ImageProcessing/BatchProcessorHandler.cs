@@ -57,7 +57,7 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             var submissionJob = client.JobOperations.GetJob(notification.BatchId.ToString());
             foreach (var file in GetFilesInBatch(notification.BatchId))
             {
-                var task = new CloudTask(file, string.Format("BatchTask.exe \"{0}\"", file));
+                var task = new CloudTask(file, string.Format("BatchTask.exe \"{0}\" \"{1}\"", file, ConfigurationService.ConfigurationValue(ConfigurationService.VisionAPIKey) ));
                 var programFile = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/batchcommand/" + "BatchTask.exe", "BatchTask.exe");
                 var dataFile = new ResourceFile(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageBaseUrl) + "/uploadedimages/" + file, file);
 
@@ -72,6 +72,7 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             foreach (CloudTask task in submissionJob.ListTasks())
             {
                 results += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardOutFileName).ReadAsString() + "\n\n";
+                var json = task.GetNodeFile("jsonresult.txt");
             }
             submissionJob.Terminate();
         }
