@@ -75,12 +75,13 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             client.Utilities.CreateTaskStateMonitor().WaitAll(submissionJob.ListTasks(), TaskState.Completed, new TimeSpan(0, 30, 0));
             var results = "";
             var errors = "";
+            var jsonResults = new Dictionary<string, string>();
             foreach (CloudTask task in submissionJob.ListTasks())
             {
                 errors += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardErrorFileName).ReadAsString() + "\n\n";
                 results += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardOutFileName).ReadAsString() + "\n\n";
                 
-                var json = GetJsonFromStorage(task.Id);
+               jsonResults.Add(task.Id, GetJsonFromStorage(task.Id));
             }
             submissionJob.Terminate();
         }
