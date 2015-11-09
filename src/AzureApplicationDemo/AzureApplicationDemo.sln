@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationDemo", "Azu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatchTask", "BatchTask\BatchTask.csproj", "{E5037605-45BE-400B-A767-8BA68090AF24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostQueueProcessor", "HostQueueProcessor\HostQueueProcessor.csproj", "{3073BB76-0BE4-4B30-AD23-795DF2C6129F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E5037605-45BE-400B-A767-8BA68090AF24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5037605-45BE-400B-A767-8BA68090AF24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5037605-45BE-400B-A767-8BA68090AF24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3073BB76-0BE4-4B30-AD23-795DF2C6129F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3073BB76-0BE4-4B30-AD23-795DF2C6129F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3073BB76-0BE4-4B30-AD23-795DF2C6129F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3073BB76-0BE4-4B30-AD23-795DF2C6129F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
