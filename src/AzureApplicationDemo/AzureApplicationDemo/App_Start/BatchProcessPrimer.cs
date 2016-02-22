@@ -47,9 +47,10 @@ namespace AzureApplicationDemo
 
         private static void CreatePool()
         {
-            var creds = new BatchSharedKeyCredentials(ConfigurationService.ConfigurationValue(ConfigurationService.BatchUrl),
-                ConfigurationService.ConfigurationValue(ConfigurationService.BatchAccountName),
-                ConfigurationService.ConfigurationValue(ConfigurationService.BatchAccountKey));
+            var creds = new BatchSharedKeyCredentials(
+                                ConfigurationService.ConfigurationValue(ConfigurationService.BatchUrl),
+                                ConfigurationService.ConfigurationValue(ConfigurationService.BatchAccountName),
+                                ConfigurationService.ConfigurationValue(ConfigurationService.BatchAccountKey));
             var client = BatchClient.Open(creds);
 
             var poolId = ConfigurationService.ConfigurationValue(ConfigurationService.BatchPoolId);

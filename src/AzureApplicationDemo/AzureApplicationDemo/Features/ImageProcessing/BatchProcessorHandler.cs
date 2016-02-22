@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 using AzureApplicationDemo.Features.Upload;
 using AzureApplicationDemo.Services;
 using MediatR;
@@ -14,16 +13,6 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace AzureApplicationDemo.Features.ImageProcessing
 {
-    public class BatchTableEntity : TableEntity
-    {
-        public BatchTableEntity(Guid batchId, string fileName)
-        {
-            this.PartitionKey = batchId.ToString();
-            this.RowKey = fileName;
-        }
-        public BatchTableEntity() { }
-    }
-
     public class BatchProcessorHandler : INotificationHandler<BatchUploadComplete>, INotificationHandler<FileUploaded>
     {
         public BatchProcessorHandler()
@@ -33,11 +22,13 @@ namespace AzureApplicationDemo.Features.ImageProcessing
 
         public void Handle(FileUploaded notification)
         {
-            var storageAccount = CloudStorageAccount.Parse(ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageConnectionString));
+            var storageAccount = CloudStorageAccount.Parse(
+                    ConfigurationService.ConfigurationValue(ConfigurationService.AzureStorageConnectionString));
             var tableClient = storageAccount.CreateCloudTableClient();
             var table = tableClient.GetTableReference("batches");
             table.CreateIfNotExists();
-            var insertOperation = TableOperation.Insert(new BatchTableEntity(notification.BatchId, notification.FileName));
+            var insertOperation = TableOperation.Insert(
+                    new BatchTableEntity(notification.BatchId, notification.FileName));
             table.Execute(insertOperation);
 
         }
@@ -52,7 +43,8 @@ namespace AzureApplicationDemo.Features.ImageProcessing
 
             var job = client.JobOperations.CreateJob();
             job.Id = notification.BatchId.ToString();
-            job.PoolInformation = new PoolInformation { PoolId = ConfigurationService.ConfigurationValue(ConfigurationService.BatchPoolId) };
+            job.PoolInformation = new PoolInformation {
+                PoolId = ConfigurationService.ConfigurationValue(ConfigurationService.BatchPoolId) };
             job.Commit();
 
             var submissionJob = client.JobOperations.GetJob(notification.BatchId.ToString());
@@ -78,8 +70,8 @@ namespace AzureApplicationDemo.Features.ImageProcessing
             var jsonResults = new Dictionary<string, string>();
             foreach (CloudTask task in submissionJob.ListTasks())
             {
-                errors += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardErrorFileName).ReadAsString() + "\n\n";
-                results += "Task " + task.Id + " says:\n" + task.GetNodeFile(Constants.StandardOutFileName).ReadAsString() + "\n\n";
+                errors += string.Format("Task {0} says:\n{1}\n\n", task.Id, task.GetNodeFile(Constants.StandardErrorFileName).ReadAsString());
+                results += string.Format("Task {0} says:\n{1}\n\n", task.Id, task.GetNodeFile(Constants.StandardOutFileName).ReadAsString());
                 
                jsonResults.Add(task.Id, GetJsonFromStorage(task.Id));
             }
