@@ -1,0 +1,21 @@
+output:
+  logstash:
+    enabled: true
+    hosts:
+      - elk:5044
+    tls:
+      certificate_authorities:
+        - "C:/code/AzureImageProcessing/env/elk/logstash-beats.crt"
+    timeout: 15
+  console:
+    pretty: true
+filebeat:
+  prospectors:
+    -
+      paths:
+        - "c:/temp/*.log"
+      input_type: log
+    -
+      paths:
+        - "c:/temp/*.json"
+      input_type: json
