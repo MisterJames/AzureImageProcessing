@@ -35,13 +35,14 @@ The website was created and shared on GitHub. You can get the code by clicking o
 download as zip from the repository landing page.
 
 There are three pieces of source code that you'll want to familiarize yourself with, namely:
- - **:
- - **:
- - **:
+ - *AzureApplicationDemo*: the source to the web site - your own version of imagenomnom.com
+ - *BatchTask*: web job application used to process images
+ - *HostQueueProcessor*: sample C# API code for managing DNS entries programmatically
 
 ## Registering for "Project Oxford"
 Project Oxford has been renamed Microsoft Cognitive Services, which you'll need to visit 
 to create an account. Your dashboard should look something like this:
+![Alt text](vision-api.png)
 
 Take note of the key here, as you'll need it in the next section of this update.
 
