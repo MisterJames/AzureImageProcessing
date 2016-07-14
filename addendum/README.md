@@ -33,6 +33,7 @@ In summary, you're going to need to:
 ## Downloading the Source Code
 The website was created and shared on GitHub. You can get the code by clicking on the 
 download as zip from the repository landing page.
+
 ![Download from GitHub](github-download.png)
 
 There are three pieces of source code that you'll want to familiarize yourself with, namely:
