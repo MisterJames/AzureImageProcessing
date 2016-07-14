@@ -4,7 +4,7 @@
 When we recorded an MVA last fall we were excited to share with the community all the very cool things that you could weave together in Azure, and, yes there were many moving parts 
 to the application we built. In fact, that was part of the point; the MVA was called "Putting 
 all the Pieces Together" ([found here](https://mva.microsoft.com/en-us/training-courses/applications-on-azure-putting-all-the-pieces-together-14429?l=oQMSTsv0B_8004819052)).
-s
+
 However, over the last several months there have been a lot of changes to the Azure landscape 
 and the services that are required to make ImageNomNom work, which is why you're likely finding
 yourself here. 
@@ -50,7 +50,7 @@ to create an account. Your dashboard should look something like this:
 Take note of the key here, as you'll need it in the snext section of this update.
 
 *As a precautionary note, don't share your key! Take care that you do not check it into your 
-source repository (especially if it's public).*
+source repository (especially if it's public). Don't worry we regenerated the one shown here.*
 
  - [Cognitive Services Home page](https://www.microsoft.com/cognitive-services)
  - [How to identifiy faces in images](https://www.microsoft.com/cognitive-services/en-us/face-api/documentation/face-api-how-to-topics/howtoidentifyfacesinimage) 
