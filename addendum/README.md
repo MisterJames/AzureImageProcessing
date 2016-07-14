@@ -33,6 +33,7 @@ In summary, you're going to need to:
 ## Downloading the Source Code
 The website was created and shared on GitHub. You can get the code by clicking on the 
 download as zip from the repository landing page.
+![Download from GitHub](github-download.png)
 
 There are three pieces of source code that you'll want to familiarize yourself with, namely:
  - *AzureApplicationDemo*: the source to the web site - your own version of imagenomnom.com
@@ -43,7 +44,7 @@ There are three pieces of source code that you'll want to familiarize yourself w
 Project Oxford has been renamed Microsoft Cognitive Services, which you'll need to visit 
 to create an account. Your dashboard should look something like this:
 
-![Alt text](vision-api.png)
+![Vision API Dashboard](vision-api.png)
 
 Take note of the key here, as you'll need it in the snext section of this update.
 
